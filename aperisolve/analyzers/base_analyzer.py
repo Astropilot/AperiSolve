@@ -1,6 +1,3 @@
-# flake8: noqa: E203,E501,W503
-# pylint: disable=C0413,W0718,W0613,R0903,R0801
-# mypy: disable-error-code=unused-awaitable
 """Base Analyzer class for image analysis tools."""
 
 import fcntl

@@ -1,6 +1,3 @@
-# flake8: noqa: E203,E501,W503
-# pylint: disable=W0718,R0903,R0801
-# mypy: disable-error-code=unused-awaitable
 """Sentry initialization for Aperisolve."""
 
 import os

@@ -1,6 +1,3 @@
-# flake8: noqa: E203,E501,W503
-# pylint: disable=C0413,W0718,R0903,R0801,W0612,R0912
-# mypy: disable-error-code=unused-awaitable
 """Color Remapping Analyzer for Image Submissions."""
 
 from pathlib import Path

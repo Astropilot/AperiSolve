@@ -1,6 +1,3 @@
-# flake8: noqa: E203,E501,W503
-# pylint: disable=E1101,C0413,W0212,W0718,R0903,R0801
-# mypy: disable-error-code=unused-awaitable
 """This module defines the database models for the Aperi'Solve application."""
 
 import itertools

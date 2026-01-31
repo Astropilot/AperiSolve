@@ -1,6 +1,3 @@
-# flake8: noqa: E203,E501,W503
-# pylint: disable=C0413,W0718,R0903,R0801,R0902
-# mypy: disable-error-code=unused-awaitable
 """PNG Class for analyzer modules"""
 
 import itertools
