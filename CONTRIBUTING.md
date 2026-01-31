@@ -63,14 +63,11 @@ Contributions to the web interface are welcome:
 > Follow the project’s code style and run linters before submitting any code.
 
 This project enforces:
-- **Black** : line length 100
-- **Isort** : profile black
-- **Flake8** : ignoring E203, E501, W503
-- **Pylint** : ignoring W0511, W0718, R0801, R0903, R0914
-- **Mypy** : ignoring unused-awaitable
+- **Ruff** : line length 100
+- **Mypy**
 
 > [!TIP]
-> All tool configurations (Black, Isort, Flake8, Mypy, Pylint) are centralized in pyproject.toml.
+> All tool configurations (Ruff, Mypy) are centralized in pyproject.toml.
 > You can run each tool directly and it will automatically pick up the configuration.
 
 ### Setup
@@ -95,15 +92,12 @@ pip install -r aperisolve/requirements-dev.txt
 Run this script [lint.sh](lint.sh) at the project root folder.
 
 ```
-🖤 Running Black...
+🖤 Running Ruff format...
 All done! ✨ 🍰 ✨
 25 files left unchanged.
-📦 Running Isort...
-Skipped 2 files
-🐍 Running Flake8...
+📦 Running Ruff check...
 🔍 Running Mypy...
 Success: no issues found in 25 source files
-⚡ Running Pylint...
 
 ------------------------------------
 Your code has been rated at 10.00/10
@@ -117,27 +111,11 @@ Create a pre-commit hooks file [.pre-commit-config.yaml](#) at the project root 
 
 ```bash
 repos:
-- repo: https://github.com/psf/black
-  rev: 25.12.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.11
   hooks:
-  - id: black
-    args: ['--line-length', '100']
-- repo: https://github.com/pycqa/isort
-  rev: 7.0.0
-  hooks:
-  - id: isort
-    args: ['--profile', 'black']
-- repo: https://github.com/PyCQA/flake8
-  rev: 7.3.0
-  hooks:
-  - id: flake8
-    args: ['--extend-ignore','E203,E501,W503']
-- repo: https://github.com/pylint-dev/pylint
-  rev: v4.0.4
-  hooks:
-  - id: pylint
-    args: ['--disable', 'W0511,W0718,R0801,R0903,R0914']
-    language: system
+    - id: ruff-check
+    - id: ruff-format
 - repo: local
   hooks:
     - id: mypy
@@ -153,8 +131,6 @@ repos:
           "--follow-imports",
           "skip",
           "--ignore-missing-imports",
-          "--disable-error-code",
-          "unused-awaitable",
         ]
 ```
 

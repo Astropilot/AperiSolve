@@ -1,5 +1,5 @@
 # Minimal Python project configuration for linters and type checkers.
-# This file centralizes config for black, isort, flake8, mypy, pylint.
+# This file centralizes config for ruff, mypy, pre-commit.
 
 [project]
 name = "aperisolve"
@@ -12,26 +12,48 @@ authors = [
     {name = "Zeecka"}
 ]
 
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = ["py312"]
+indent-width = 4
+target-version = "py312"
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+select = [
+    "E",        # pycodestyle errors
+    "W",        # pycodestyle warnings
+    "F",        # pyflakes
+    "I",        # isort
+    "UP",       # pyupgrade
+    "PL",       # pylint
+    "N",        # pep8-naming
+    "RUF",      # Ruff-specific rules
+    "FURB",     # refurb
+    "SIM",      # flake8-simplify
+    "A",        # flake8-builtins
+    "C4",       # flake8-comprehensions
+    "B",        # flake8-bugbear
+    "S",        # flake8-bandit
+    "DTZ",      # flake8-datetimez
+    "PTH",      # flake8-use-pathlib
+]
+ignore = [
+    "E501",     # line too long, handled by ruff
+    "C901",     # mccabe complexity
+    "PLR2004",  # magic values
+    "S324",     # Probable use of insecure hash functions in `hashlib`: `md5`
+    "S104",     # Possible binding to all interfaces
+]
 
-[tool.flake8]
-extend-ignore = ["E203", "E501", "W503"]
-max-line-length = 100
+[tool.ruff.format]
+line-ending = "auto"
+quote-style = "double"
+indent-style = "space"
 
 [tool.mypy]
 disallow_any_generics = true
 disallow_untyped_defs = true
 follow_imports = "skip"
 ignore_missing_imports = true
-disable_error_code = ["unused-awaitable"]
-
-[tool.pylint]
-disable = ["W0511", "W0718", "R0801", "R0903", "R0914"]
 
 [tool.pre-commit]
 skip = true
@@ -39,9 +61,6 @@ skip = true
 [tool.doc]
 description = """
 Linting and type checking configuration for this project.
-- Black: code formatting
-- Isort: import sorting
-- Flake8: code style
+- Ruff: code formatting + import sorting + code style + code quality
 - Mypy: static typing
-- Pylint: code quality
 """
