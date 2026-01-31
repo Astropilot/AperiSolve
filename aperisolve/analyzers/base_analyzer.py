@@ -2,7 +2,6 @@
 
 import fcntl
 import json
-import os
 import subprocess
 import threading
 from abc import ABC
@@ -65,8 +64,8 @@ class SubprocessAnalyzer(ABC):
 
         json_file.parent.mkdir(parents=True, exist_ok=True)
 
-        with _thread_lock:  # synchronizes across threads
-            with open(lock_file, "w", encoding="utf-8") as lock:
+        with _thread_lock:  # synchronizes across threads  # noqa: SIM117
+            with lock_file.open("w", encoding="utf-8") as lock:
                 fcntl.flock(lock, fcntl.LOCK_EX)  # synchronizes across processes
 
                 try:
@@ -74,7 +73,7 @@ class SubprocessAnalyzer(ABC):
                     data: dict[Any, Any] = {}
                     if json_file.exists():
                         try:
-                            with open(json_file, "r", encoding="utf-8") as f:
+                            with json_file.open("r", encoding="utf-8") as f:
                                 data = json.load(f)
                         except json.JSONDecodeError:
                             data = {}
@@ -83,10 +82,10 @@ class SubprocessAnalyzer(ABC):
                     data.update(new_data)
 
                     # Write safely to a temp file
-                    with open(tmp_file, "w", encoding="utf-8") as f:
+                    with tmp_file.open("w", encoding="utf-8") as f:
                         json.dump(data, f, sort_keys=False)
 
-                    os.replace(tmp_file, json_file)  # ensures file write is atomic
+                    tmp_file.replace(json_file)  # ensures file write is atomic
                 finally:
                     fcntl.flock(lock, fcntl.LOCK_UN)
 

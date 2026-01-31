@@ -158,7 +158,7 @@ def create_app() -> Flask:
         # This fixes the "Ghost File" issue (DB exists, but file is missing)
         if not new_img_path.exists():
             new_img_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(new_img_path, "wb") as f:
+            with new_img_path.open("wb") as f:
                 f.write(image_data)
 
         # Try to find image in DB by hash
@@ -249,7 +249,7 @@ def create_app() -> Flask:
         if not result_path.exists():
             return jsonify({"error": "Results not ready yet..."}), 425
 
-        with open(result_path, "r", encoding="utf-8") as f:
+        with result_path.open("r", encoding="utf-8") as f:
             results = json.load(f)
 
         return jsonify({"results": results}), 200
