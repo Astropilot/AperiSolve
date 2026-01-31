@@ -1,11 +1,11 @@
 """This module defines the database models for the Aperi'Solve application."""
 
+import datetime
 import itertools
 import shutil
 import struct
 import time
 import zlib
-from datetime import datetime, timezone
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (
@@ -32,13 +32,13 @@ class Image(db.Model):  # type: ignore
     file = Column(String(128), unique=True, nullable=False)
     size = Column(Integer, nullable=False)
     first_submission_date = Column(
-        DateTime, nullable=False, default=lambda: datetime.now(timezone.utc)
+        DateTime, nullable=False, default=lambda: datetime.datetime.now(datetime.UTC)
     )
     last_submission_date = Column(
         DateTime,
         nullable=False,
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.datetime.now(datetime.UTC),
+        onupdate=lambda: datetime.datetime.now(datetime.UTC),
     )
     upload_count = Column(Integer)
     submissions = db.relationship("Submission", backref="image", lazy=True)
@@ -55,7 +55,7 @@ class Submission(db.Model):  # type: ignore
     password = Column(String(128))
     deep_analysis = Column(Boolean, default=False)
     status = Column(String(20), default="pending")
-    date = Column(Float, nullable=False, default=lambda: datetime.now(timezone.utc))
+    date = Column(Float, nullable=False, default=lambda: datetime.datetime.now(datetime.UTC))
 
     # Foreign key to Image
     image_hash = Column(String, db.ForeignKey("image.hash"), nullable=False)
@@ -107,7 +107,9 @@ class UploadLog(db.Model):  # type: ignore
     id = Column(Integer, primary_key=True, autoincrement=True)
     ip_address = Column(String(45), nullable=False)  # IPv6 max length is 45
     user_agent = Column(String(512), nullable=True)
-    upload_time = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    upload_time = Column(
+        DateTime, nullable=False, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
     image_hash = Column(String(64), nullable=False)
     submission_hash = Column(String(128), nullable=True)
     filename = Column(String(128), nullable=True)
@@ -212,10 +214,10 @@ def cleanup_old_entries() -> None:
     # Delete "old" images
     for img in Image.query.all():  # type: ignore
         if img.last_submission_date.tzinfo is None:
-            img_date = img.last_submission_date.replace(tzinfo=timezone.utc)
+            img_date = img.last_submission_date.replace(tzinfo=datetime.UTC)
         else:
             img_date = img.last_submission_date
-        delay = datetime.now(timezone.utc) - img_date
+        delay = datetime.datetime.now(datetime.UTC) - img_date
         img_fold = RESULT_FOLDER / img.hash
         if delay.total_seconds() > MAX_STORE_TIME:
             for s in img.submissions:

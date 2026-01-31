@@ -1,10 +1,10 @@
 """Aperi'Solve Flask application."""
 
+import datetime
 import hashlib
 import json
 import shutil
 import time
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -48,7 +48,7 @@ def create_app() -> Flask:
     @app.context_processor
     def inject_datetime() -> dict[str, Any]:
         """Inject datetime into all templates."""
-        return {"datetime": datetime}
+        return {"datetime": datetime.datetime}
 
     @app.errorhandler(413)
     def too_large(_: Any) -> tuple[Response, int]:
@@ -171,8 +171,8 @@ def create_app() -> Flask:
                 hash=img_hash,
                 size=len(image_data),
                 upload_count=0,
-                first_submission_date=datetime.now(timezone.utc),
-                last_submission_date=datetime.now(timezone.utc),
+                first_submission_date=datetime.datetime.now(datetime.UTC),
+                last_submission_date=datetime.datetime.now(datetime.UTC),
             )
             db.session.add(sub_img)  # pylint: disable=no-member
             db.session.commit()  # pylint: disable=no-member
@@ -316,7 +316,7 @@ def create_app() -> Flask:
         # Archive the original image (copy to removed_images folder with metadata)
         original_image_path = Path(image.file)
         if original_image_path.exists():
-            dt = datetime.now(timezone.utc).isoformat()
+            dt = datetime.datetime.now(datetime.UTC).isoformat()
             archive_filename = f"{image.hash}_{submission.hash}_{dt}{original_image_path.suffix}"
             archive_path = REMOVED_IMAGES_FOLDER / archive_filename
             try:
