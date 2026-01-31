@@ -38,7 +38,7 @@ class SubprocessAnalyzer(ABC):
         self, cmd: list[str], cwd: Path | None = None
     ) -> subprocess.CompletedProcess[str]:
         """Run a subprocess command."""
-        return subprocess.run(
+        return subprocess.run(  # noqa: S603
             cmd,
             cwd=cwd,
             capture_output=True,

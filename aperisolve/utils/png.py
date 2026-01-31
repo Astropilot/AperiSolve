@@ -336,18 +336,17 @@ class PNG:
                 if fixed_data := self._fix_dos2unix(
                     chunk_type, chunk_data, crc, abs(length - len(chunk_data))
                 ):
-                    idat_chunk = idat_chunk[:8] + fixed_data + idat_chunk[-4:]
+                    idat_chunk = idat_chunk[:8] + fixed_data + idat_chunk[-4:]  # noqa: PLW2901
                     self._log("Successfully recovered IDAT chunk data (DOS->Unix fix)")
                     fixed = True
                 else:
                     self._log("Failed to fix IDAT chunk, using original")
-            else:
-                if calc_crc := self._check_crc(chunk_type, chunk_data, crc):
-                    self._log(f"Error IDAT CRC at offset {int2hex(offset + 8 + length)}")
-                    self._log(f"Chunk crc: {str2hex(crc)}, Correct: {str2hex(calc_crc)}")
-                    idat_chunk = idat_chunk[:-4] + calc_crc
-                    self._log("Successfully fixed CRC")
-                    fixed = True
+            elif calc_crc := self._check_crc(chunk_type, chunk_data, crc):
+                self._log(f"Error IDAT CRC at offset {int2hex(offset + 8 + length)}")
+                self._log(f"Chunk crc: {str2hex(crc)}, Correct: {str2hex(calc_crc)}")
+                idat_chunk = idat_chunk[:-4] + calc_crc  # noqa: PLW2901
+                self._log("Successfully fixed CRC")
+                fixed = True
 
             self.repaired_data.extend(idat_chunk)
             offset += len(chunk_data) + 12

@@ -12,7 +12,7 @@ def str2hex(s: bytes) -> str:
 
 def int2hex(i: int) -> str:
     """Convert int to hex string with 0x prefix."""
-    return "0x" + hex(i)[2:].upper()
+    return "0x" + f"{i:x}".upper()
 
 
 def get_resolutions() -> list[tuple[int, int]]:

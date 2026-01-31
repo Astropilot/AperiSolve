@@ -33,7 +33,7 @@ def main() -> None:
                             rmtree(item)
                         else:
                             item.unlink()
-                    except Exception:
+                    except Exception:  # noqa: S112
                         continue
 
             print("⚠️  CLEAR_AT_RESTART=1 detected")
@@ -42,12 +42,11 @@ def main() -> None:
             print("🗄️  Recreating schema...")
             db.create_all()
 
+        elif not tables:
+            print("🗄️  Creating database schema...")
+            db.create_all()
         else:
-            if not tables:
-                print("🗄️  Creating database schema...")
-                db.create_all()
-            else:
-                print("🗄️  Database schema already exists")
+            print("🗄️  Database schema already exists")
 
         print("📦 Filling IHDR static data...")
         fill_ihdr_db()

@@ -42,6 +42,9 @@ ignore = [
     "PLR2004",  # magic values
     "S324",     # Probable use of insecure hash functions in `hashlib`: `md5`
     "S104",     # Possible binding to all interfaces
+    "SIM108",   # Use ternary operator instead of if-else expression
+    "PLR0915",  # Too many statements in function or method
+    "S101",     # Usage of assert
 ]
 
 [tool.ruff.format]

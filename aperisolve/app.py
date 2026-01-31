@@ -17,7 +17,7 @@ from .utils.sentry import initialize_sentry
 
 initialize_sentry()
 
-from .config import (
+from .config import (  # noqa: E402
     CUSTOM_EXTERNAL_SCRIPT,
     DB_URI,
     FLASK_DEBUG,
@@ -30,7 +30,7 @@ from .config import (
     RESULT_FOLDER,
     WORKER_FILES,
 )
-from .models import Image, Submission, UploadLog, cleanup_old_entries, db
+from .models import Image, Submission, UploadLog, cleanup_old_entries, db  # noqa: E402
 
 
 def create_app() -> Flask:
@@ -222,8 +222,8 @@ def create_app() -> Flask:
         """Get the metadata and information of a submission."""
         submission = Submission.query.get_or_404(hash_val)
         image = Image.query.get_or_404(submission.image_hash)  # type: ignore
-        names = [name for name in set(sub.filename for sub in image.submissions) if name]
-        passwords = [pwd for pwd in set(sub.password for sub in image.submissions) if pwd]
+        names = [name for name in {sub.filename for sub in image.submissions} if name]
+        passwords = [pwd for pwd in {sub.password for sub in image.submissions} if pwd]
         return jsonify(
             {
                 "image_path": "image/" + str(Path(image.file).name),

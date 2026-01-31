@@ -10,25 +10,25 @@ from .utils.sentry import initialize_sentry
 
 initialize_sentry()
 
-from .analyzers.binwalk import analyze_binwalk  # pylint: disable=C0413
-from .analyzers.color_remapping import analyze_color_remapping
-from .analyzers.decomposer import analyze_decomposer
-from .analyzers.exiftool import analyze_exiftool
-from .analyzers.file import analyze_file
-from .analyzers.foremost import analyze_foremost
-from .analyzers.identify import analyze_identify
-from .analyzers.jpseek import analyze_jpseek
-from .analyzers.jsteg import analyze_jsteg
-from .analyzers.openstego import analyze_openstego
-from .analyzers.outguess import analyze_outguess
-from .analyzers.pcrt import analyze_pcrt
-from .analyzers.pngcheck import analyze_pngcheck
-from .analyzers.steghide import analyze_steghide
-from .analyzers.strings import analyze_strings
-from .analyzers.zsteg import analyze_zsteg
-from .app import create_app
-from .config import RESULT_FOLDER
-from .models import Image, Submission, db
+from .analyzers.binwalk import analyze_binwalk  # noqa: E402
+from .analyzers.color_remapping import analyze_color_remapping  # noqa: E402
+from .analyzers.decomposer import analyze_decomposer  # noqa: E402
+from .analyzers.exiftool import analyze_exiftool  # noqa: E402
+from .analyzers.file import analyze_file  # noqa: E402
+from .analyzers.foremost import analyze_foremost  # noqa: E402
+from .analyzers.identify import analyze_identify  # noqa: E402
+from .analyzers.jpseek import analyze_jpseek  # noqa: E402
+from .analyzers.jsteg import analyze_jsteg  # noqa: E402
+from .analyzers.openstego import analyze_openstego  # noqa: E402
+from .analyzers.outguess import analyze_outguess  # noqa: E402
+from .analyzers.pcrt import analyze_pcrt  # noqa: E402
+from .analyzers.pngcheck import analyze_pngcheck  # noqa: E402
+from .analyzers.steghide import analyze_steghide  # noqa: E402
+from .analyzers.strings import analyze_strings  # noqa: E402
+from .analyzers.zsteg import analyze_zsteg  # noqa: E402
+from .app import create_app  # noqa: E402
+from .config import RESULT_FOLDER  # noqa: E402
+from .models import Image, Submission, db  # noqa: E402
 
 
 def analyze_image(submission_hash: str) -> None:
