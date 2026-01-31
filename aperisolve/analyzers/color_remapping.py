@@ -1,7 +1,7 @@
 """Color Remapping Analyzer for Image Submissions."""
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 from PIL import Image
@@ -53,7 +53,7 @@ class ColorRemappingAnalyzer(SubprocessAnalyzer):
 
         return remapped_img
 
-    def get_results(self, password: Optional[str] = None) -> dict[str, Any]:
+    def get_results(self, password: str | None = None) -> dict[str, Any]:
         """Analyze an image submission using color remapping."""
         img = Image.open(self.input_img)
         converted = False

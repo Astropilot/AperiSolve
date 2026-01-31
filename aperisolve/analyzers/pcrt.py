@@ -1,7 +1,7 @@
 """PCRT (PNG Check & Repair Tool) Analyzer for Image Submissions."""
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from ..utils.png import PNG
 from .base_analyzer import SubprocessAnalyzer
@@ -30,7 +30,7 @@ class PCRTAnalyzer(SubprocessAnalyzer):
         with extra_path.open("wb") as f:
             f.write(data)
 
-    def get_results(self, password: Optional[str] = None) -> dict[str, Any]:
+    def get_results(self, password: str | None = None) -> dict[str, Any]:
         """Analyze PNG and attempt repairs."""
         try:
             with self.input_img.open("rb") as f:
@@ -67,7 +67,7 @@ class PCRTAnalyzer(SubprocessAnalyzer):
             return result
 
         except Exception as e:
-            return {"status": "error", "error": f"Analysis failed: {str(e)}"}
+            return {"status": "error", "error": f"Analysis failed: {e}"}
 
 
 def analyze_pcrt(input_img: Path, output_dir: Path) -> None:

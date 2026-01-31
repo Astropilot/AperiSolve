@@ -8,7 +8,7 @@ import threading
 from abc import ABC
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Optional, overload
+from typing import Any, overload
 
 from ..config import MAX_PENDING_TIME
 
@@ -36,7 +36,7 @@ class SubprocessAnalyzer(ABC):
         self.has_archive = has_archive
 
     def run_command(
-        self, cmd: list[str], cwd: Optional[Path] = None
+        self, cmd: list[str], cwd: Path | None = None
     ) -> subprocess.CompletedProcess[str]:
         """Run a subprocess command."""
         return subprocess.run(
@@ -48,7 +48,7 @@ class SubprocessAnalyzer(ABC):
             timeout=MAX_PENDING_TIME,
         )
 
-    def generate_archive(self, output_dir: Path, extracted_dir: Optional[Path] = None) -> str:
+    def generate_archive(self, output_dir: Path, extracted_dir: Path | None = None) -> str:
         """Zip the extracted files and remove the directory."""
         if extracted_dir is None:
             extracted_dir = self.get_extracted_dir()
@@ -100,13 +100,13 @@ class SubprocessAnalyzer(ABC):
     @overload
     def build_cmd(self, password: str) -> list[str]: ...
 
-    def build_cmd(self, password: Optional[str] = None) -> list[str]:
+    def build_cmd(self, password: str | None = None) -> list[str]:
         """Build the command to run. Can be overridden."""
         if self.cmd is None:
             raise NotImplementedError("cmd must be set or build_cmd overridden")
         return self.cmd
 
-    def get_results(self, password: Optional[str] = None) -> dict[str, Any]:
+    def get_results(self, password: str | None = None) -> dict[str, Any]:
         """Get results of command before returning."""
         result: dict[str, Any]
         extracted_dir = None
@@ -140,7 +140,7 @@ class SubprocessAnalyzer(ABC):
                 "status": "ok",
                 "output": self.process_output(stdout, stderr),
             }
-            note: Optional[str] = self.process_note(stdout, stderr)
+            note: str | None = self.process_note(stdout, stderr)
             if note:
                 result["note"] = note
             if zip_exist:
@@ -153,7 +153,7 @@ class SubprocessAnalyzer(ABC):
     @overload
     def analyze(self, password: str) -> None: ...
 
-    def analyze(self, password: Optional[str] = None) -> None:
+    def analyze(self, password: str | None = None) -> None:
         """Run the subprocess command and handle results."""
         result: dict[str, Any]
         try:
@@ -175,6 +175,6 @@ class SubprocessAnalyzer(ABC):
         """Process the stderr."""
         return stderr
 
-    def process_note(self, stdout: str, stderr: str) -> Optional[str]:
+    def process_note(self, stdout: str, stderr: str) -> str | None:
         """Process the stdout for informational purposes."""
         return None

@@ -2,7 +2,7 @@
 
 import binascii
 import math
-from typing import Iterable
+from collections.abc import Iterable
 
 
 def str2hex(s: bytes) -> str:
@@ -44,8 +44,8 @@ def get_resolutions() -> list[tuple[int, int]]:
         list(range(16, 257, 16))  # 16 → 256
         + list(range(320, 1025, 32))  # 320 → 1024
         + list(range(1280, 2561, 64))  # 1280 → 2560
-        + list(range(3000, 4097, 128))  # 3K–4K
-        + list(range(5120, 8193, 256))  # 5K–8K
+        + list(range(3000, 4097, 128))  # 3K-4K
+        + list(range(5120, 8193, 256))  # 5K-8K
         + [10000]  # upper bound
     )
     aspect_ratios = [

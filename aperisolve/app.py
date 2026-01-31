@@ -6,7 +6,7 @@ import shutil
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import sentry_sdk
 from flask import Flask, Response, abort, jsonify, render_template, request, send_file
@@ -411,7 +411,7 @@ def create_app() -> Flask:
 
     @app.route("/image/<img_name>")
     @app.route("/image/<hash_val>/<img_name>")
-    def get_image(hash_val: Optional[str] = None, img_name: Optional[str] = None) -> Response:
+    def get_image(hash_val: str | None = None, img_name: str | None = None) -> Response:
         """
         Download the image with a specific name (usually ones generated with
         decomposer) for a given submission hash.

@@ -1,7 +1,7 @@
 """Bits Decomposer Analyzer for Image Submissions."""
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 from PIL import Image
@@ -15,7 +15,7 @@ class DecomposerAnalyzer(SubprocessAnalyzer):
     def __init__(self, input_img: Path, output_dir: Path) -> None:
         super().__init__("decomposer", input_img, output_dir)
 
-    def get_results(self, _: Optional[str] = None) -> dict[str, Any]:
+    def get_results(self, _: str | None = None) -> dict[str, Any]:
         """Analyze an image submission using bits decomposition."""
         img = Image.open(self.input_img)
         converted = False

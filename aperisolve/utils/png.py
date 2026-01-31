@@ -4,7 +4,7 @@ import itertools
 import re
 import struct
 import zlib
-from typing import Any, Optional
+from typing import Any
 
 from ..app import create_app
 from ..models import IHDR
@@ -44,7 +44,7 @@ class PNG:
         """Check if data contains PNG signature chunks."""
         return all(p in data for p in [b"IHDR", b"IDAT", b"IEND"])
 
-    def _check_crc(self, chunk_type: bytes, chunk_data: bytes, checksum: bytes) -> Optional[bytes]:
+    def _check_crc(self, chunk_type: bytes, chunk_data: bytes, checksum: bytes) -> bytes | None:
         """Check CRC of chunk."""
         calc_crc = struct.pack("!I", zlib.crc32(chunk_type + chunk_data))
         return calc_crc if calc_crc != checksum else None
@@ -287,7 +287,7 @@ class PNG:
 
     def _fix_dos2unix(
         self, chunk_type: bytes, chunk_data: bytes, crc: bytes, count: int
-    ) -> Optional[bytes]:
+    ) -> bytes | None:
         """Fix DOS to Unix line ending conversion."""
         pos_list = []
         pos = -1
@@ -355,7 +355,7 @@ class PNG:
         self._log(f"IDAT chunk check complete at offset {int2hex(idat_begin)}")
         return fixed
 
-    def check_iend(self) -> tuple[bool, Optional[bytes]]:
+    def check_iend(self) -> tuple[bool, bytes | None]:
         """Check and repair IEND chunk."""
         standard_iend = b"\x00\x00\x00\x00IEND\xae\x42\x60\x82"
         pos = self.data.find(b"IEND")
@@ -382,7 +382,7 @@ class PNG:
         self._log("IEND chunk check complete")
         return fixed, extra_data
 
-    def repair(self) -> tuple[bool, Optional[bytes]]:
+    def repair(self) -> tuple[bool, bytes | None]:
         """Run full PNG repair process."""
 
         if not self._check_format(self.data):

@@ -1,7 +1,6 @@
 """Outguess Analyzer for Image Submissions."""
 
 from pathlib import Path
-from typing import Optional
 
 from .base_analyzer import SubprocessAnalyzer
 
@@ -12,7 +11,7 @@ class OutguessAnalyzer(SubprocessAnalyzer):
     def __init__(self, input_img: Path, output_dir: Path) -> None:
         super().__init__("outguess", input_img, output_dir, has_archive=True)
 
-    def build_cmd(self, password: Optional[str] = None) -> list[str]:
+    def build_cmd(self, password: str | None = None) -> list[str]:
         extracted_dir = self.get_extracted_dir()
         assert extracted_dir is not None  # since has_archive is True
         out = str(extracted_dir / "outguess.data")
@@ -21,7 +20,7 @@ class OutguessAnalyzer(SubprocessAnalyzer):
         return ["outguess", "-r", self.img, out]
 
 
-def analyze_outguess(input_img: Path, output_dir: Path, password: Optional[str] = None) -> None:
+def analyze_outguess(input_img: Path, output_dir: Path, password: str | None = None) -> None:
     """Analyze an image submission using outguess."""
     analyzer = OutguessAnalyzer(input_img, output_dir)
     if password:

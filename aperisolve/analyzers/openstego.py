@@ -1,7 +1,7 @@
 """OpenStego Analyzer for Image Submissions."""
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from .base_analyzer import SubprocessAnalyzer
 
@@ -13,7 +13,7 @@ class OpenStegoAnalyzer(SubprocessAnalyzer):
         super().__init__("openstego", input_img, output_dir, has_archive=True)
         self.algo = 0
 
-    def build_cmd(self, password: Optional[str] = None) -> list[str]:
+    def build_cmd(self, password: str | None = None) -> list[str]:
         """Iterator that return command for OpenStego for every algorithms"""
         if password is None:
             password = ""
@@ -31,7 +31,7 @@ class OpenStegoAnalyzer(SubprocessAnalyzer):
             len(list(self.get_extracted_dir().glob("*"))) == 0 and "Extracted file: " not in stderr
         )
 
-    def analyze(self, password: Optional[str] = None) -> None:
+    def analyze(self, password: str | None = None) -> None:
         """Run the subprocess command and handle results."""
         result: dict[str, Any]
         try:
