@@ -17,6 +17,8 @@ class FileAnalyzer(SubprocessAnalyzer):
         return stdout
 
 
+
+
 def analyze_file(input_img: Path, output_dir: Path) -> None:
     """Analyze an image submission using `file`."""
     analyzer = FileAnalyzer(input_img, output_dir)
