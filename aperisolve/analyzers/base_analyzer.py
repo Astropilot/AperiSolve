@@ -64,30 +64,32 @@ class SubprocessAnalyzer(ABC):
 
         json_file.parent.mkdir(parents=True, exist_ok=True)
 
-        with _thread_lock:  # synchronizes across threads  # noqa: SIM117
-            with lock_file.open("w", encoding="utf-8") as lock:
-                fcntl.flock(lock, fcntl.LOCK_EX)  # synchronizes across processes
+        with (
+            _thread_lock,  # synchronizes across threads
+            lock_file.open("w", encoding="utf-8") as lock,  # synchronizes across processes
+        ):
+            fcntl.flock(lock, fcntl.LOCK_EX)
 
-                try:
-                    # Read existing JSON
-                    data: dict[Any, Any] = {}
-                    if json_file.exists():
-                        try:
-                            with json_file.open("r", encoding="utf-8") as f:
-                                data = json.load(f)
-                        except json.JSONDecodeError:
-                            data = {}
+            try:
+                # Read existing JSON
+                data: dict[Any, Any] = {}
+                if json_file.exists():
+                    try:
+                        with json_file.open("r", encoding="utf-8") as f:
+                            data = json.load(f)
+                    except json.JSONDecodeError:
+                        data = {}
 
-                    # Update with new data
-                    data.update(new_data)
+                # Update with new data
+                data.update(new_data)
 
-                    # Write safely to a temp file
-                    with tmp_file.open("w", encoding="utf-8") as f:
-                        json.dump(data, f, sort_keys=False)
+                # Write safely to a temp file
+                with tmp_file.open("w", encoding="utf-8") as f:
+                    json.dump(data, f, sort_keys=False)
 
-                    tmp_file.replace(json_file)  # ensures file write is atomic
-                finally:
-                    fcntl.flock(lock, fcntl.LOCK_UN)
+                tmp_file.replace(json_file)  # ensures file write is atomic
+            finally:
+                fcntl.flock(lock, fcntl.LOCK_UN)
 
     def get_extracted_dir(self) -> Path:
         """Get the extracted directory path. Can be overridden but work as it is."""
