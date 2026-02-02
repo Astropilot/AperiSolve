@@ -33,7 +33,7 @@ def main() -> None:
                             rmtree(item)
                         else:
                             item.unlink()
-                    except Exception:  # noqa: S112
+                    except Exception:
                         continue
 
             print("⚠️  CLEAR_AT_RESTART=1 detected")
